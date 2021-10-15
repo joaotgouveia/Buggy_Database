@@ -1,2 +1,2 @@
-# FP_Project1
+# Buggy Database
 First Uni Project
