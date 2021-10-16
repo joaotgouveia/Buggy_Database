@@ -1,7 +1,7 @@
 def corrigir_palavra(sCadCarateres):
     lCadCarateres = []
     bChanged = True
-    sCorrected = ""
+    sCadCorrigida = ""
 
     for i in range(len(sCadCarateres)):
         lCadCarateres += sCadCarateres[i]
@@ -26,8 +26,8 @@ def corrigir_palavra(sCadCarateres):
    
     for i in range(len(sCadCarateres)):
         if lCadCarateres[i] != 0:
-            sCorrected += lCadCarateres[i]
-    return sCorrected
+            sCadCorrigida += lCadCarateres[i]
+    return sCadCorrigida
 
 def eh_anagrama(sCadCarateres1, sCadCarateres2):
     lCadCarateres1 = []
@@ -55,4 +55,37 @@ def eh_anagrama(sCadCarateres1, sCadCarateres2):
 
     return bAnagrama
 
-print(eh_anagrama(input(), input()))
+def corrigir_doc(sCadCarateres):
+    sAuxiliar = ""
+    lCadCarateres = []
+    sDocCorrigido = ""
+    if sCadCarateres == "":
+        return ValueError("ValueError: corrigir doc: argumento invalido")
+    for i in range(len(sCadCarateres)):
+        if not sCadCarateres[i].isalpha():
+            if sCadCarateres[i] == " " and sCadCarateres[i + 1] == " ":
+                return ValueError("ValueError: corrigir doc: argumento invalido")
+            elif sCadCarateres[i] != " ":
+                return ValueError("ValueError: corrigir doc: argumento invalido")
+            else:
+                lCadCarateres.append(sAuxiliar)
+                sAuxiliar = ""
+        else:
+            sAuxiliar += sCadCarateres[i]
+    lCadCarateres.append(sAuxiliar)
+
+    for i in range(len(lCadCarateres)):
+        lCadCarateres[i] = corrigir_palavra(lCadCarateres[i])
+    for i in range(len(lCadCarateres)):
+        for j in range(i + 1, len(lCadCarateres)):
+            if lCadCarateres[i] != 0 and lCadCarateres[j] != 0:
+                if eh_anagrama(lCadCarateres[i], lCadCarateres[j]) and lCadCarateres[i] != lCadCarateres[j]:
+                    lCadCarateres[j] = 0
+    
+    for i in range(len(lCadCarateres)):
+        if lCadCarateres[i] != 0:
+            sDocCorrigido += lCadCarateres[i] + " "
+    sDocCorrigido.strip()
+    return sDocCorrigido
+print(corrigir_doc(input()))
+
