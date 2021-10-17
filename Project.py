@@ -87,5 +87,52 @@ def corrigir_doc(sCadCarateres):
             sDocCorrigido += lCadCarateres[i] + " "
     sDocCorrigido.strip()
     return sDocCorrigido
-print(corrigir_doc(input()))
+
+def obter_posicao(sCarater, iInteiro):
+    iInteiro = int(iInteiro)
+    if sCarater == "C":
+        if iInteiro != 1 and iInteiro != 2 and iInteiro != 3:
+            return iInteiro - 3
+        else:
+            return iInteiro
+    elif sCarater == "B":
+        if iInteiro != 7 and iInteiro != 8 and iInteiro != 9:
+            return iInteiro + 3
+        else:
+            return iInteiro
+    elif sCarater == "E":
+        if iInteiro != 1 and iInteiro != 4 and iInteiro != 7:
+            return iInteiro - 1
+        else:
+            return iInteiro
+    else:
+        if iInteiro != 3 and iInteiro != 6 and iInteiro != 9:
+            return iInteiro + 1
+        else:
+            return iInteiro
+
+def obter_digito(sCadCarateres, iPosicaoInicial):
+    iPosicaoFinal = iPosicaoInicial
+    for i in range(len(sCadCarateres)):
+        iPosicaoFinal = obter_posicao(sCadCarateres[i], iPosicaoFinal)
+    return iPosicaoFinal
+
+def obter_pin(tMovimentos):
+    iPosicao = 5
+    lPin = []
+    
+    if len(tMovimentos) < 4 or len(tMovimentos) > 10:
+        return ValueError("ValueError: obter_pin: argumento invalido")
+    for i in range(len(tMovimentos)):
+        for j in range(len(tMovimentos[i])):
+            if tMovimentos[i][j] != "C" and tMovimentos[i][j] != "B" and tMovimentos[i][j] != "E" and tMovimentos[i][j] != "D":
+                return ValueError("ValueError: obter_pin: argumento invalido")
+
+    for i in range(len(tMovimentos)):
+        iPosicao = obter_digito(tMovimentos[i], iPosicao)
+        lPin.append(iPosicao)
+    return tuple(lPin)
+
+t = ("CEE", "DDBBB", "ECDBE", "CCCCB")
+print(obter_pin(t)) 
 
