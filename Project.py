@@ -133,6 +133,5 @@ def obter_pin(tMovimentos):
         lPin.append(iPosicao)
     return tuple(lPin)
 
-t = ("CEE", "DDBBB", "ECDBE", "CCCCB")
-print(obter_pin(t)) 
+
 
