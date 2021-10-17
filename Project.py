@@ -133,5 +133,40 @@ def obter_pin(tMovimentos):
         lPin.append(iPosicao)
     return tuple(lPin)
 
+def eh_entrada(tEntrada):
+    if type(tEntrada) != tuple:
+        return False
+    elif len(tEntrada) != 3:
+        return False
+    elif type(tEntrada[0]) != str or type(tEntrada[1]) != list or type(tEntrada[2]) != tuple:
+        return False
+    elif len(tEntrada[0]) < 1 or len(tEntrada[1]) != 1 or len(tEntrada[1][0]) != 5 or  len(tEntrada[2]) < 2:
+        return False
+    
+    for i in range(len(tEntrada[0])):
+        if not tEntrada[0][i].isalpha():
+            if tEntrada[0][i] != "-":
+                return False
+            elif tEntrada[0][i] == "-" and i != len(tEntrada[0]) - 1:
+                if tEntrada[0][i] == tEntrada[0][i+1]:
+                    return False
+        else:
+            if tEntrada[0][i].isupper():
+                return False
+    if tEntrada[0][0] == "-" or tEntrada[0][-1] == "-":
+        return False
+    
+    for i in range(5):
+        if not tEntrada[1][0][i].isalpha():
+            return False
+    
+    for i in range(len(tEntrada[2])):
+        if type(tEntrada[2][i]) != int:
+            return False
+        elif len(str(tEntrada[2][i])) != 3:
+            return False
+    
+    return True
+
 
 
