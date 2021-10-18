@@ -208,3 +208,111 @@ def validar_cifra(sCifra, sSeqControlo):
 
 
 print(validar_cifra("a-b-c-d-e-f-g-h", "abcde"))
+
+
+
+
+# Testes
+
+
+def teste121():
+    total_score = 0
+    fun_name = corrigir_palavra
+
+    corrigir_palavra('abBAx')
+    # x
+
+    corrigir_palavra('cCdatabasacCADde')
+    # database
+
+    return
+
+
+def teste122():
+    total_score = 0
+    fun_name = eh_anagrama
+
+    eh_anagrama('caso', 'SaCo')
+    # True
+
+    eh_anagrama('caso', 'casos')
+    # False
+
+    return
+
+
+def teste123():
+    total_score = 0
+    fun_name = corrigir_doc
+
+    corrigir_doc('???')
+    # corrigir_doc: argumento invalido
+
+    doc = 'BuAaXOoxiIKoOkggyrFfhHXxR duJjUTtaCcmMtaAGga eEMmtxXOjUuJQqQHhqoada JlLjbaoOsuUeYy cChgGvValLCwMmWBbclLsNn LyYlMmwmMrRrongTtoOkyYcCK daRfFKkLlhHrtZKqQkkvVKza'
+    corrigir_doc(doc)
+    # Buggy data base has wrong data
+
+    return
+
+
+def teste221():
+    total_score = 0
+    fun_name = obter_posicao
+
+    obter_posicao('C', 5)
+    # 2
+
+    return
+
+
+def teste222():
+    total_score = 0
+    fun_name = obter_digito
+
+    obter_digito('CEE', 5)
+    # 1
+
+    return
+
+
+def teste223():
+    total_score = 0
+    fun_name = obter_pin
+
+    obter_pin(())
+    # obter_pin: argumento invalido
+
+    t = ('CEE', 'DDBBB', 'ECDBE', 'CCCCB')
+    obter_pin(t)
+    # (1, 9, 8, 5)
+
+    return
+
+
+def teste321():
+
+    total_score = 0
+    fun_name = eh_entrada
+
+    eh_entrada(('a-b-c-d-e-f-g-h', '[abcd]', (950, 300)))
+    # False
+
+    eh_entrada(('a-b-c-d-e-f-g-h-2', '[abcde]', (950, 300)))
+    # False
+
+    eh_entrada(('a-b-c-d-e-f-g-h', '[xxxxx]', (950, 300)))
+    # True
+
+    return
+
+def teste322():
+    total_score = 0
+    fun_name = validar_cifra
+
+    validar_cifra('a-b-c-d-e-f-g-h', '[xxxxx]')
+    # False
+
+    validar_cifra('a-b-c-d-e-f-g-h', '[abcde]')
+    # True
+
+    return
