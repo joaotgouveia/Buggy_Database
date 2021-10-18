@@ -172,7 +172,7 @@ def eh_entrada(tEntrada):
     for i in range(len(tEntrada[2])):
         if type(tEntrada[2][i]) != int:
             return False
-        elif len(str(tEntrada[2][i])) != 3:
+        elif tEntrada[2][i] < 0:
             return False
     
     return True
@@ -187,7 +187,8 @@ def ordem_alfabetica(sChar1, sChar2):
 def validar_cifra(sCifra, sSeqControlo):
     lVerificacao = []
     iContador = 0
-    
+    sSeqControlo = sSeqControlo[0]
+
     for i in range(len(sSeqControlo)):
         for j in range(len(sCifra)):
             if sSeqControlo[i] == sCifra[j]:
@@ -205,3 +206,19 @@ def validar_cifra(sCifra, sSeqControlo):
                 return False
     
     return True
+
+def filtrar_bdb(lEntradas):
+    lEntradas_Incorretas = []
+
+    if len(lEntradas) < 1:
+        raise ValueError("filtrar bdb: argumento invalido")
+
+    for i in range(len(lEntradas)):
+        if not eh_entrada(lEntradas[i]):
+            raise ValueError("filtrar_bdb: argumento invalido")
+        elif not validar_cifra(lEntradas[i][0], lEntradas[i][1]):
+            lEntradas_Incorretas.append(lEntradas[i])
+    return lEntradas_Incorretas
+
+print(filtrar_bdb([("aaaaa-bbb-zx-yz-xy", ["abxyz"], (950,300)),("a-b-c-d-e-f-g-h", ["abcde"], (124,325,7)), ("entrada-muito-errada", ["abcde"], (50,404))]))
+    
