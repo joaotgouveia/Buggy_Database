@@ -1,4 +1,4 @@
-# Correção da documentação
+# 1. Correção da documentação
 
 def corrigir_palavra(sCadCarateres):
     lCadCarateres = []
@@ -92,7 +92,7 @@ def corrigir_doc(sCadCarateres):
     sDocCorrigido.strip()
     return sDocCorrigido
 
-    # Descoberta do PIN
+# 2. Descoberta do PIN
 
 def obter_posicao(sCarater, iInteiro):
     iInteiro = int(iInteiro)
@@ -140,7 +140,7 @@ def obter_pin(tMovimentos):
         lPin.append(iPosicao)
     return tuple(lPin)
 
-    # Verificação de dados
+# 3. Verificação de dados
 
 def eh_entrada(tEntrada):
     if type(tEntrada) != tuple:
@@ -220,5 +220,12 @@ def filtrar_bdb(lEntradas):
             lEntradas_Incorretas.append(lEntradas[i])
     return lEntradas_Incorretas
 
-print(filtrar_bdb([("aaaaa-bbb-zx-yz-xy", ["abxyz"], (950,300)),("a-b-c-d-e-f-g-h", ["abcde"], (124,325,7)), ("entrada-muito-errada", ["abcde"], (50,404))]))
-    
+# 4. Desencriptação de dados
+
+def obter_numero(tSeqSeguranca):
+    lOrdenados = list(tSeqSeguranca)
+    lOrdenados.sort(reverse=True)
+
+    return lOrdenados
+
+print(obter_numero((12,11,50,2,3,4,0,1,78)))
