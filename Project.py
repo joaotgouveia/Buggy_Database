@@ -1,3 +1,5 @@
+# Correção da documentação
+
 def corrigir_palavra(sCadCarateres):
     lCadCarateres = []
     bChanged = True
@@ -59,14 +61,16 @@ def corrigir_doc(sCadCarateres):
     sAuxiliar = ""
     lCadCarateres = []
     sDocCorrigido = ""
+    if type(sCadCarateres) != str:
+        raise ValueError("corrigir doc: argumento invalido")
     if sCadCarateres == "":
-        return ValueError("ValueError: corrigir doc: argumento invalido")
+        raise ValueError("corrigir doc: argumento invalido")
     for i in range(len(sCadCarateres)):
         if not sCadCarateres[i].isalpha():
             if sCadCarateres[i] == " " and sCadCarateres[i + 1] == " ":
-                return ValueError("ValueError: corrigir doc: argumento invalido")
+                raise ValueError("corrigir doc: argumento invalido")
             elif sCadCarateres[i] != " ":
-                return ValueError("ValueError: corrigir doc: argumento invalido")
+                raise ValueError("corrigir doc: argumento invalido")
             else:
                 lCadCarateres.append(sAuxiliar)
                 sAuxiliar = ""
@@ -87,6 +91,8 @@ def corrigir_doc(sCadCarateres):
             sDocCorrigido += lCadCarateres[i] + " "
     sDocCorrigido.strip()
     return sDocCorrigido
+
+    # Descoberta do PIN
 
 def obter_posicao(sCarater, iInteiro):
     iInteiro = int(iInteiro)
@@ -120,18 +126,21 @@ def obter_digito(sCadCarateres, iPosicaoInicial):
 def obter_pin(tMovimentos):
     iPosicao = 5
     lPin = []
-    
-    if len(tMovimentos) < 4 or len(tMovimentos) > 10:
-        return ValueError("ValueError: obter_pin: argumento invalido")
+    if type(tMovimentos) != tuple:
+        raise ValueError("obter_pin: argumento invalido")
+    elif len(tMovimentos) < 4 or len(tMovimentos) > 10:
+        raise ValueError("obter_pin: argumento invalido")
     for i in range(len(tMovimentos)):
         for j in range(len(tMovimentos[i])):
             if tMovimentos[i][j] != "C" and tMovimentos[i][j] != "B" and tMovimentos[i][j] != "E" and tMovimentos[i][j] != "D":
-                return ValueError("ValueError: obter_pin: argumento invalido")
+                raise ValueError("obter_pin: argumento invalido")
 
     for i in range(len(tMovimentos)):
         iPosicao = obter_digito(tMovimentos[i], iPosicao)
         lPin.append(iPosicao)
     return tuple(lPin)
+
+    # Verificação de dados
 
 def eh_entrada(tEntrada):
     if type(tEntrada) != tuple:
@@ -168,5 +177,27 @@ def eh_entrada(tEntrada):
     
     return True
 
+def validar_cifra(sCifra, sSeqControlo):
+    lVerificacao = []
+    iContador = 0
+    
+    for i in range(len(sCifra)):
+        for j in range(len(sSeqControlo)):
+            if sCifra[i] == sSeqControlo[j]:
+                iContador += 1
+        lVerificacao.append(iContador)
+        iContador = 0
+    
+    for i in range(len(lVerificacao)):
+        if lVerificacao[i] == 0:
+            return False
+        elif i != len(lVerificacao) - 1:
+            if lVerificacao[i] < lVerificacao[i+1]:
+                return False
+            elif lVerificacao[i] == lVerificacao[i+1] and sCifra[i] < sCifra[i +1]:
+                return False
+    
+    return True
 
 
+print(validar_cifra("a-b-c-d-e-f-g-h", "abcde"))
