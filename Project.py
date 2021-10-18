@@ -177,13 +177,20 @@ def eh_entrada(tEntrada):
     
     return True
 
+def ordem_alfabetica(sChar1, sChar2):
+    lCadCarateres = [sChar1, sChar2]
+    lAlfabetica = sorted(sChar1+sChar2)
+    if lAlfabetica[0] == lCadCarateres[0]:
+        return True
+    return False
+
 def validar_cifra(sCifra, sSeqControlo):
     lVerificacao = []
     iContador = 0
     
-    for i in range(len(sCifra)):
-        for j in range(len(sSeqControlo)):
-            if sCifra[i] == sSeqControlo[j]:
+    for i in range(len(sSeqControlo)):
+        for j in range(len(sCifra)):
+            if sSeqControlo[i] == sCifra[j]:
                 iContador += 1
         lVerificacao.append(iContador)
         iContador = 0
@@ -194,7 +201,7 @@ def validar_cifra(sCifra, sSeqControlo):
         elif i != len(lVerificacao) - 1:
             if lVerificacao[i] < lVerificacao[i+1]:
                 return False
-            elif lVerificacao[i] == lVerificacao[i+1] and sCifra[i] < sCifra[i +1]:
+            elif lVerificacao[i] == lVerificacao[i+1] and not ordem_alfabetica(sSeqControlo[i], sSeqControlo[i+1]):
                 return False
     
     return True
