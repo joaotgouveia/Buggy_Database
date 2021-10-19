@@ -29,6 +29,7 @@ def corrigir_palavra(sCadCarateres):
     for i in range(len(sCadCarateres)):
         if lCadCarateres[i] != 0:
             sCadCorrigida += lCadCarateres[i]
+    
     return sCadCorrigida
 
 def eh_anagrama(sCadCarateres1, sCadCarateres2):
@@ -90,6 +91,7 @@ def corrigir_doc(sCadCarateres):
         if lCadCarateres[i] != 0:
             sDocCorrigido += lCadCarateres[i] + " "
     sDocCorrigido.strip()
+    
     return sDocCorrigido
 
 # 2. Descoberta do PIN
@@ -121,6 +123,7 @@ def obter_digito(sCadCarateres, iPosicaoInicial):
     iPosicaoFinal = iPosicaoInicial
     for i in range(len(sCadCarateres)):
         iPosicaoFinal = obter_posicao(sCadCarateres[i], iPosicaoFinal)
+    
     return iPosicaoFinal
 
 def obter_pin(tMovimentos):
@@ -138,6 +141,7 @@ def obter_pin(tMovimentos):
     for i in range(len(tMovimentos)):
         iPosicao = obter_digito(tMovimentos[i], iPosicao)
         lPin.append(iPosicao)
+    
     return tuple(lPin)
 
 # 3. Verificação de dados
@@ -182,6 +186,7 @@ def ordem_alfabetica(sChar1, sChar2):
     lAlfabetica = sorted(sChar1+sChar2)
     if lAlfabetica[0] == lCadCarateres[0]:
         return True
+    
     return False
 
 def validar_cifra(sCifra, sSeqControlo):
@@ -218,14 +223,81 @@ def filtrar_bdb(lEntradas):
             raise ValueError("filtrar_bdb: argumento invalido")
         elif not validar_cifra(lEntradas[i][0], lEntradas[i][1]):
             lEntradas_Incorretas.append(lEntradas[i])
+    
     return lEntradas_Incorretas
 
 # 4. Desencriptação de dados
 
-def obter_numero(tSeqSeguranca):
+def obter_num_seguranca(tSeqSeguranca):
     lOrdenados = list(tSeqSeguranca)
     lOrdenados.sort(reverse=True)
+    
+    for i in range(len(lOrdenados)-1):
+        iNumSeguranca = lOrdenados[i] - lOrdenados[i+1]
+        if iNumSeguranca > lOrdenados[i] - lOrdenados[i+1]:
+            iNumSeguranca = lOrdenados[i] - lOrdenados[i+1]
+    
+    return iNumSeguranca
 
-    return lOrdenados
+def transformar_letra(cLetra, iNumSeguranca, iPos):
+    lAlfabeto = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+    if iPos % 2 == 0:
+        iPos = 1
+    else:
+        iPos = -1
+    for i in range(len(lAlfabeto)):
+        if lAlfabeto[i] == cLetra:
+            iLetra = i
+            break
+    iLetraTransformada = iLetra + iNumSeguranca + iPos
+    
+    while iLetraTransformada >  25:
+        iLetraTransformada -= 26
+    
+    return lAlfabeto[iLetraTransformada]
 
-print(obter_numero((12,11,50,2,3,4,0,1,78)))
+def decifrar_texto(sCifra, iNumSeguranca):
+    lAux = []
+    lTextoDecifrado = []
+    sTextoDecifrado = ""
+    for char in sCifra:
+        if char.isalpha():
+            lAux.append(char)
+        else:
+            for i in range(len(lAux)):
+                lTextoDecifrado.append(transformar_letra(lAux[i], iNumSeguranca, i))
+            lTextoDecifrado.append(" ")
+            lAux.clear()
+    
+    for i in range(len(lTextoDecifrado)):
+        sTextoDecifrado += lTextoDecifrado[i]
+    return sTextoDecifrado
+
+print(decifrar_texto("qgfo-qutdo-so-egoes-wzegsnfmjqz", obter_num_seguranca((2223,424,1316,99))))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
