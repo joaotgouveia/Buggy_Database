@@ -260,21 +260,25 @@ def decifrar_texto(sCifra, iNumSeguranca):
     lAux = []
     lTextoDecifrado = []
     sTextoDecifrado = ""
+    iIndex = 0
     for char in sCifra:
         if char.isalpha():
             lAux.append(char)
         else:
             for i in range(len(lAux)):
-                lTextoDecifrado.append(transformar_letra(lAux[i], iNumSeguranca, i))
+                lTextoDecifrado.append(transformar_letra(lAux[i], iNumSeguranca, i + iIndex))
             lTextoDecifrado.append(" ")
+            iIndex += len(lAux) + 1
             lAux.clear()
+    
+    for i in range(len(lAux)):
+                lTextoDecifrado.append(transformar_letra(lAux[i], iNumSeguranca, i + iIndex))
     
     for i in range(len(lTextoDecifrado)):
         sTextoDecifrado += lTextoDecifrado[i]
     return sTextoDecifrado
 
-print(decifrar_texto("qgfo-qutdo-so-egoes-wzegsnfmjqz", obter_num_seguranca((2223,424,1316,99))))
-
+print(decifrar_texto("qgfo-qutdo-s-egoes-wzegsnfmjqz", obter_num_seguranca((2223,424,1316,99))))
 
 
 
