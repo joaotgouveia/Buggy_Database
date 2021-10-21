@@ -270,15 +270,47 @@ def decifrar_texto(sCifra, iNumSeguranca):
             lTextoDecifrado.append(" ")
             iIndex += len(lAux) + 1
             lAux.clear()
-    
     for i in range(len(lAux)):
                 lTextoDecifrado.append(transformar_letra(lAux[i], iNumSeguranca, i + iIndex))
     
     for i in range(len(lTextoDecifrado)):
         sTextoDecifrado += lTextoDecifrado[i]
+
     return sTextoDecifrado
 
-print(decifrar_texto("qgfo-qutdo-s-egoes-wzegsnfmjqz", obter_num_seguranca((2223,424,1316,99))))
+# 5. Depuração de senhas
+
+def conta_vogais(sSenha):
+    iVogais = 0
+    for char in sSenha:
+        if char == "a":
+            iVogais += 1
+        elif char == "e":
+            iVogais += 1
+        elif char == "i":
+            iVogais += 1
+        elif char == "o":
+            iVogais += 1
+        elif char == "u":
+            iVogais += 1
+    
+    return iVogais
+
+def valida_repeticoes(sSenha):
+    for i in range(len(sSenha)-1):
+        if sSenha[i] == sSenha[i+1]:
+            return True
+    
+    return False
+
+def eh_utilizador(dUtilizador):
+    if type(dUtilizador) == dict:
+        if len(dUtilizador) != 3 and "name" in dUtilizador.keys() and "pass" in dUtilizador.keys() and "rule" in dUtilizador.keys():
+            if len(dUtilizador["name"]) > 0 and len(dUtilizador["pass"]) > 0 and len(dUtilizador["rule"]) > 0:
+                return True
+    
+    return False
+print(eh_utilizador({"name":"john.doe", "pass":"aabcde", "rule":{"vals": (1,3), "char":"a"}}))
 
 
 
