@@ -280,7 +280,7 @@ def decifrar_texto(sCifra, iNumSeguranca):
 
 # 5. Depuração de senhas
 
-def conta_vogais(sSenha):
+def valida_vogais(sSenha):
     iVogais = 0
     for char in sSenha:
         if char == "a":
@@ -294,32 +294,60 @@ def conta_vogais(sSenha):
         elif char == "u":
             iVogais += 1
     
-    return iVogais
+    if iVogais > 2:
+        return True
+
+    return False
 
 def valida_repeticoes(sSenha):
     for i in range(len(sSenha)-1):
-        if sSenha[i] == sSenha[i+1]:
+        if sSenha[i] == sSenha[i+1]:    
             return True
     
     return False
 
 def eh_utilizador(dUtilizador):
     if type(dUtilizador) == dict:
-        if len(dUtilizador) != 3 and "name" in dUtilizador.keys() and "pass" in dUtilizador.keys() and "rule" in dUtilizador.keys():
+        if len(dUtilizador) == 3 and "name" in dUtilizador.keys() and "pass" in dUtilizador.keys() and "rule" in dUtilizador.keys():
             if len(dUtilizador["name"]) > 0 and len(dUtilizador["pass"]) > 0 and len(dUtilizador["rule"]) > 0:
-                return True
+                if type(dUtilizador["rule"]) == dict:
+                    if "vals" in dUtilizador["rule"].keys() and "char" in dUtilizador["rule"].keys():
+                        if type(dUtilizador["rule"]["vals"]) == tuple and type(dUtilizador["rule"]["char"]) == str:
+                            return True
     
     return False
-print(eh_utilizador({"name":"john.doe", "pass":"aabcde", "rule":{"vals": (1,3), "char":"a"}}))
 
+def eh_senha_valida(sSenha, dRegras):
+    iContaChar = 0
+    if valida_repeticoes(sSenha) and valida_vogais:
+        for char in sSenha:
+            if char == dRegras["char"]:
+                iContaChar += 1
+        if dRegras["vals"][0] < iContaChar < dRegras["vals"][1]:
+            return True
+    
+    return False
 
+def filtrar_senhas(lEntradas):
+    lUtilizadoresCorrompidos = []
+    if len(lEntradas) < 1:
+        raise ValueError("filtrar_senhas: argumento invalido")
+    if not eh_utilizador:
+        raise ValueError("filtrar_senhas: argumento invalido")
+    
+    for dEntrada in lEntradas:
+        if eh_senha_valida(dEntrada["pass"], dEntrada["rule"]):
+            lUtilizadoresCorrompidos.append(dEntrada["name"])
+    lUtilizadoresCorrompidos.sort()
+    return lUtilizadoresCorrompidos
 
+bdb = [ {"name":"john.doe", "pass":"aabcde", "rule":{"vals":(1,3),
+"char":"a"}}, {"name":"jane.doe", "pass":"cdefgh",
+"rule":{"vals":(1,3), "char":"b"}}, {"name":"jack.doe",
+"pass":"cccccc", "rule":{"vals":(2,9), "char":"c"}} ]
 
-
-
-
-
-
+print(filtrar_senhas(bdb))
+    
 
 
 
