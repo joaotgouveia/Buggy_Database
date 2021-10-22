@@ -63,15 +63,15 @@ def corrigir_doc(sCadCarateres):
     lCadCarateres = []
     sDocCorrigido = ""
     if type(sCadCarateres) != str:
-        raise ValueError("corrigir doc: argumento invalido")
+        raise ValueError("corrigir_doc: argumento invalido")
     if sCadCarateres == "":
-        raise ValueError("corrigir doc: argumento invalido")
+        raise ValueError("corrigir_doc: argumento invalido")
     for i in range(len(sCadCarateres)):
         if not sCadCarateres[i].isalpha():
             if sCadCarateres[i] == " " and sCadCarateres[i + 1] == " ":
-                raise ValueError("corrigir doc: argumento invalido")
+                raise ValueError("corrigir_doc: argumento invalido")
             elif sCadCarateres[i] != " ":
-                raise ValueError("corrigir doc: argumento invalido")
+                raise ValueError("corrigir_doc: argumento invalido")
             else:
                 lCadCarateres.append(sAuxiliar)
                 sAuxiliar = ""
@@ -216,7 +216,7 @@ def filtrar_bdb(lEntradas):
     lEntradas_Incorretas = []
 
     if len(lEntradas) < 1:
-        raise ValueError("filtrar bdb: argumento invalido")
+        raise ValueError("filtrar_bdb: argumento invalido")
 
     for i in range(len(lEntradas)):
         if not eh_entrada(lEntradas[i]):
@@ -278,6 +278,19 @@ def decifrar_texto(sCifra, iNumSeguranca):
 
     return sTextoDecifrado
 
+def decifrar_bdb(lEntradas):
+    lEntradasDecifradas = []
+    if lEntradas == []:
+        raise ValueError("decifrar_bdb: argumento invalido")
+    for tEntrada in lEntradas:
+        if not eh_entrada(tEntrada):
+            raise ValueError("decifrar_bdb: argumento invalido")
+    
+    for tEntrada in lEntradas:
+        lEntradasDecifradas.append(decifrar_texto(tEntrada[0], obter_num_seguranca(tEntrada[2])))
+
+    return lEntradasDecifradas
+
 # 5. Depuração de senhas
 
 def valida_vogais(sSenha):
@@ -307,23 +320,35 @@ def valida_repeticoes(sSenha):
     return False
 
 def eh_utilizador(dUtilizador):
-    if type(dUtilizador) == dict:
-        if len(dUtilizador) == 3 and "name" in dUtilizador.keys() and "pass" in dUtilizador.keys() and "rule" in dUtilizador.keys():
-            if len(dUtilizador["name"]) > 0 and len(dUtilizador["pass"]) > 0 and len(dUtilizador["rule"]) > 0:
-                if type(dUtilizador["rule"]) == dict:
-                    if "vals" in dUtilizador["rule"].keys() and "char" in dUtilizador["rule"].keys():
-                        if type(dUtilizador["rule"]["vals"]) == tuple and type(dUtilizador["rule"]["char"]) == str:
-                            return True
-    
-    return False
+    if type(dUtilizador) != dict:
+        return False
+    if len(dUtilizador) != 3 and "name" in dUtilizador.keys() and "pass" in dUtilizador.keys() and "rule" in dUtilizador.keys():
+        return False
+    if not "name" in dUtilizador.keys() or not "pass" in dUtilizador.keys() or not "rule" in dUtilizador.keys():
+        return False
+    if len(dUtilizador["name"]) < 1 or len(dUtilizador["pass"]) < 1:
+        return False
+    if type(dUtilizador["rule"]) != dict:
+        return False
+    if not "vals" in dUtilizador["rule"].keys() or not "char" in dUtilizador["rule"].keys():
+        return False
+    if type(dUtilizador["rule"]["vals"]) != tuple or type(dUtilizador["rule"]["char"]) != str:
+        return False
+    if type(dUtilizador["rule"]["vals"][0]) != int or type(dUtilizador["rule"]["vals"][1]) != int:
+        return False
+    if dUtilizador["rule"]["vals"][0] < 1 or dUtilizador["rule"]["vals"][1] < 1:
+        return False
+    if not dUtilizador["rule"]["vals"][1] >= dUtilizador["rule"]["vals"][0]:
+        return False
+    return True
 
 def eh_senha_valida(sSenha, dRegras):
     iContaChar = 0
-    if valida_repeticoes(sSenha) and valida_vogais:
+    if valida_repeticoes(sSenha) and valida_vogais(sSenha):
         for char in sSenha:
             if char == dRegras["char"]:
                 iContaChar += 1
-        if dRegras["vals"][0] < iContaChar < dRegras["vals"][1]:
+        if dRegras["vals"][0] <= iContaChar <= dRegras["vals"][1]:
             return True
     
     return False
@@ -336,18 +361,11 @@ def filtrar_senhas(lEntradas):
         raise ValueError("filtrar_senhas: argumento invalido")
     
     for dEntrada in lEntradas:
-        if eh_senha_valida(dEntrada["pass"], dEntrada["rule"]):
+        if not eh_senha_valida(dEntrada["pass"], dEntrada["rule"]):
             lUtilizadoresCorrompidos.append(dEntrada["name"])
     lUtilizadoresCorrompidos.sort()
     return lUtilizadoresCorrompidos
 
-bdb = [ {"name":"john.doe", "pass":"aabcde", "rule":{"vals":(1,3),
-"char":"a"}}, {"name":"jane.doe", "pass":"cdefgh",
-"rule":{"vals":(1,3), "char":"b"}}, {"name":"jack.doe",
-"pass":"cccccc", "rule":{"vals":(2,9), "char":"c"}} ]
-
-print(filtrar_senhas(bdb))
-    
 
 
 

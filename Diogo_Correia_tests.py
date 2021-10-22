@@ -5,7 +5,7 @@ import requests
 
 if len(sys.argv) < 2:
     print(
-        "Por favor escreve o caminho para o ficheiro: python proj_tester.py caminho/para/projeto.py"
+        "Por favor escreve o caminho para o ficheiro: python proj_tester.py C:\Users\joaot\Desktop\Projetos\Buggy_Database\Project.py"
     )
     exit(1)
 
